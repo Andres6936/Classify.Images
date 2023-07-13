@@ -7,7 +7,8 @@ URL = 'https://carulla.vtexassets.com/arquivos/ids/'
 
 if __name__ == '__main__':
     # Range calculated from 12_000_000 to 12_025_100
-    for i in range(12_025_100, 19_999_999):
+    # Range calculated from 12_025_100 to 12_051_821
+    for i in range(12_051_821, 19_999_999):
         stream = requests.get(URL + str(i))
         print(f"Request: {i}")
         # Verify if the URL is empty response
