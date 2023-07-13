@@ -6,7 +6,8 @@ from requests.exceptions import JSONDecodeError
 # Range calculated from 12_000_000 to 12_025_100
 # Range calculated from 12_025_100 to 12_051_821
 # Range calculated from 12_051_821 to 12_102_326
-START = 12_102_326
+# Range calculated from 12_102_326 to 12_137_900
+START = 12_137_900
 END = 19_999_999
 
 # Used for determine the time of wait between request
