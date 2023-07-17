@@ -1,5 +1,6 @@
 import time
 import requests
+import logging
 
 from requests.exceptions import JSONDecodeError
 
@@ -34,7 +35,17 @@ def ScrapperImage(start: int, end: int) -> None:
             file.write(stream.content)
 
 
+def Scrapper(start: int, end: int) -> None:
+    logging.info(f"Start: {start}, End: {end}")
+
+
 if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.INFO,
+        format='[%(asctime)s][%(levelname)s][%(threadName)s] %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
     for index in range(START, END, STEP):
-        ScrapperImage(index, index + STEP)
+        # ScrapperImage(index, index + STEP)
+        Scrapper(index, index + STEP)
         time.sleep(10)
