@@ -1,19 +1,15 @@
-import time
 import requests
 import logging
 
+from multiprocessing.pool import Pool
 from requests.exceptions import JSONDecodeError
 
-# Range calculated from 12_000_000 to 12_025_100
-# Range calculated from 12_025_100 to 12_051_821
-# Range calculated from 12_051_821 to 12_102_326
-# Range calculated from 12_102_326 to 12_137_900
-# Range calculated from 12_137_900 to 12_153_355
-START = 12_153_355
-END = 19_999_999
+START = 12_750_000
+END = 12_999_999
 
+MAXIMUM_THREADS_SPAWN = 16
 # Used for determine the time of wait between request
-STEP = 5_000
+STEP = 1_000
 URL = 'https://carulla.vtexassets.com/arquivos/ids/'
 
 
@@ -35,17 +31,14 @@ def ScrapperImage(start: int, end: int) -> None:
             file.write(stream.content)
 
 
-def Scrapper(start: int, end: int) -> None:
-    logging.info(f"Start: {start}, End: {end}")
-
-
 if __name__ == '__main__':
     logging.basicConfig(
         level=logging.INFO,
         format='[%(asctime)s][%(levelname)s][%(threadName)s] %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
-    for index in range(START, END, STEP):
-        # ScrapperImage(index, index + STEP)
-        Scrapper(index, index + STEP)
-        time.sleep(10)
+    with Pool(processes=MAXIMUM_THREADS_SPAWN) as pool:
+        for index in range(START, END, STEP):
+            pool.starmap_async(ScrapperImage, [(index if index == START else index + 1, index + STEP)])
+        pool.close()
+        pool.join()
