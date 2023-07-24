@@ -14,20 +14,20 @@ URL = 'https://carulla.vtexassets.com/arquivos/ids/'
 
 
 def ScrapperImage(start: int, end: int) -> None:
-    print(f"Start request {start} to {end}")
+    logging.info(f"Start request {start} to {end}")
     for i in range(start, end):
         stream = requests.get(URL + str(i))
-        print(f"Request: {i}")
+        logging.info(f"Request: {i}")
         # Verify if the URL is empty response
         try:
             response = stream.json()
             if response['statusCode'] == 404:
                 continue
-        except JSONDecodeError as ignored:
+        except JSONDecodeError:
             pass
         # The response is a valid image, parse and save
         with open('../Data/' + str(i) + '.webp', 'wb') as file:
-            print(f"Writing file: {i}.webp")
+            logging.info(f"Writing file: {i}.webp")
             file.write(stream.content)
 
 
