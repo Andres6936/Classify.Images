@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List, AnyStr
 
 BLOCK_SIZE = 65536
-GLOB_CRITERIA = "../12M_12_025_100"
+GLOB_CRITERIA = "../12M_12_*"
 
 
 def CalculateHash(filepath: Path) -> str:
