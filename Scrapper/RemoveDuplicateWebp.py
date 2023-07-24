@@ -22,7 +22,7 @@ def CalculateHash(filepath: Path) -> str:
 def RemoveRepeatFiles(directory: str, repeatable: dict[str, str]):
     logging.info("Removing repeat files in directory: " + directory)
     for hashfile in repeatable:
-        filenames = repeatable[hashfile].split(',')
+        filenames = repeatable[hashfile].rstrip(',').split(',')
         for file in filenames:
             logging.info("Removing file: " + file)
             os.remove(Path(directory, file))
