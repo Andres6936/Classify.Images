@@ -11,28 +11,28 @@ GLOB_CRITERIA = "../12M_12_025_100"
 def CalculateHash(filepath: Path) -> str:
     filehash = hashlib.sha256()
     with open(filepath, 'rb') as file:
-        binaryBlock = file.read(BLOCK_SIZE)
+        binaryBlock: AnyStr = file.read(BLOCK_SIZE)
         while len(binaryBlock) > 0:
             filehash.update(binaryBlock)
-            binaryBlock = file.read(BLOCK_SIZE)
+            binaryBlock: AnyStr = file.read(BLOCK_SIZE)
     return filehash.hexdigest()
 
 
 def RunRemoveDuplicateWebp():
     logging.info("Start remove duplicate webp")
-    hashtable = {}
-    repeatable = {}
+    hashtable: dict[str, int] = {}
+    repeatable: dict[str, str] = {}
     directories: List[AnyStr] = glob.glob(GLOB_CRITERIA)
     for directory in directories:
         for file in Path(directory).glob("*.webp"):
             hashfile: str = CalculateHash(file)
             if hashfile in hashtable:
-                repeatFiles = repeatable.get(hashfile, '')
-                repeatFiles = ','.join([file.name, repeatFiles])
+                repeatFiles: str = repeatable.get(hashfile, '')
+                repeatFiles: str = ','.join([file.name, repeatFiles])
                 repeatable[hashfile] = repeatFiles
 
-                repeatCount = hashtable[hashfile]
-                repeatCount = repeatCount + 1
+                repeatCount: int = hashtable[hashfile]
+                repeatCount: int = repeatCount + 1
                 hashtable[hashfile] = repeatCount
             else:
                 hashtable[hashfile] = 1
