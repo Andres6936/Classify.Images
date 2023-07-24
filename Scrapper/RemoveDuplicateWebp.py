@@ -1,6 +1,7 @@
 import glob
 import hashlib
 import logging
+import os
 from pathlib import Path
 from typing import List, AnyStr
 
@@ -18,12 +19,22 @@ def CalculateHash(filepath: Path) -> str:
     return filehash.hexdigest()
 
 
+def RemoveRepeatFiles(directory: str, repeatable: dict[str, str]):
+    logging.info("Removing repeat files in directory: " + directory)
+    for hashfile in repeatable:
+        filenames = repeatable[hashfile].split(',')
+        for file in filenames:
+            logging.info("Removing file: " + file)
+            os.remove(Path(directory, file))
+
+
 def RunRemoveDuplicateWebp():
     logging.info("Start remove duplicate webp")
-    hashtable: dict[str, int] = {}
-    repeatable: dict[str, str] = {}
     directories: List[AnyStr] = glob.glob(GLOB_CRITERIA)
     for directory in directories:
+        hashtable: dict[str, int] = {}
+        repeatable: dict[str, str] = {}
+        logging.info(f"Start calculate hash for directory: {directory}")
         for file in Path(directory).glob("*.webp"):
             logging.info(f"Calculate hash for file: {file.name}")
             hashfile: str = CalculateHash(file)
@@ -38,3 +49,6 @@ def RunRemoveDuplicateWebp():
                 hashtable[hashfile] = repeatCount
             else:
                 hashtable[hashfile] = 1
+        logging.info("Removing all repeat files for directory: " + directory)
+        RemoveRepeatFiles(directory, repeatable)
+        logging.info("Finish calculate hash and remove duplicate files in directory: " + directory)
