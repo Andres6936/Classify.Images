@@ -25,8 +25,10 @@ def RunRemoveDuplicateWebp():
     directories: List[AnyStr] = glob.glob(GLOB_CRITERIA)
     for directory in directories:
         for file in Path(directory).glob("*.webp"):
+            logging.info(f"Calculate hash for file: {file.name}")
             hashfile: str = CalculateHash(file)
             if hashfile in hashtable:
+                logging.info(f"Found repeat hash by file: {file.name}")
                 repeatFiles: str = repeatable.get(hashfile, '')
                 repeatFiles: str = ','.join([file.name, repeatFiles])
                 repeatable[hashfile] = repeatFiles
