@@ -50,6 +50,8 @@ def CreateModel():
         metrics=['accuracy'])
     return model
 
+LOAD_MODEL = True
+
 
 if __name__ == '__main__':
     print(tf.__version__)
@@ -85,7 +87,12 @@ if __name__ == '__main__':
     model = CreateModel()
     print('\nSummary Model: ', model.summary())
 
-    model.fit(train_images, train_labels, epochs=10)
+    if LOAD_MODEL:
+        model.load_weights('ClassificationImagesFashion.keras')
+    else:
+        model.fit(train_images, train_labels, epochs=10)
+        model.save('ClassificationImagesFashion.keras')
+
     test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
     print('\nTest accuracy:', test_acc)
 
