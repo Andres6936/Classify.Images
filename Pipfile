@@ -9,6 +9,7 @@ numpy = "*"
 matplotlib = "*"
 tensorflow-cpu = "==2.10.*"
 pillow = "==10.*"
+tensorflow-hub = "*"
 
 [dev-packages]
 

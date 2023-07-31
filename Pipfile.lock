@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "15168501c4c7d7ffaeb18ac1602fc3c05f5e4f2c9c273ed4c78dec90b70f13b3"
+            "sha256": "64c05a72eef6e5a0cdf72084ac5922677a3a32dd543a82a521a2ccb85dc22fe8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -824,6 +824,13 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==2.10.0"
+        },
+        "tensorflow-hub": {
+            "hashes": [
+                "sha256:519c6b56c4d304667fbd8ce66bd637e6a750c901215468db2cc6bfd0739bb0b0"
+            ],
+            "index": "pypi",
+            "version": "==0.14.0"
         },
         "tensorflow-intel": {
             "hashes": [
