@@ -6,8 +6,6 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from io import BytesIO
 
-original_image_cache = {}
-
 
 def preprocess_image(image):
     image = np.array(image)
@@ -30,14 +28,11 @@ def load_image_from_url(img_url):
 def load_image(image_url, image_size=256, dynamic_size=False, max_dynamic_size=512):
     """Loads and preprocesses images."""
     # Cache image file locally.
-    if image_url in original_image_cache:
-        img = original_image_cache[image_url]
-    elif image_url.startswith('https://'):
+    if image_url.startswith('https://'):
         img = load_image_from_url(image_url)
     else:
         fd = tf.io.gfile.GFile(image_url, 'rb')
         img = preprocess_image(Image.open(fd))
-    original_image_cache[image_url] = img
     # Load and convert to float32 numpy array, add batch dimension, and normalize to range [0, 1].
     img_raw = img
     if tf.reduce_max(img) > 1.0:
