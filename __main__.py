@@ -1,9 +1,17 @@
+import sqlite3
 import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
 
+from Source.Classifier.LoaderFiles import GetListFilesRecursivelyAt
 from Source.Classifier.LoaderImage import load_image, show_image
 from Source.Classifier.Model import model_handle_map, model_image_size_map
+
+connection = sqlite3.connect("Images.sqlite")
+cursor = connection.cursor()
+cursor.execute("CREATE TABLE Images(Name TEXT PRIMARY KEY, Label TEXT)")
+imagesToClassify = GetListFilesRecursivelyAt("Pre-Trainer/**/*.webp")
+
 
 image_size = 224
 dynamic_size = False
