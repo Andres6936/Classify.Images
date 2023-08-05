@@ -185,12 +185,8 @@ class Classifier:
         top_5 = tf.argsort(probabilities, axis=-1, direction="DESCENDING")[0][:5].numpy()
         np_classes = np.array(self.classes)
 
-        # Some models include an additional 'background' class in the predictions, so
-        # we must account for this when reading the class labels.
-        includes_background_class = probabilities.shape[1] == 1001
-
         for i, item in enumerate(top_5):
-            class_index = item if includes_background_class else item + 1
+            class_index = item
             line = f'({i + 1}) {class_index:4} - {self.classes[class_index]}: {probabilities[0][top_5][i]}'
             print(line)
 
