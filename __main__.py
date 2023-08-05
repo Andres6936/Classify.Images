@@ -5,10 +5,12 @@ from Source.Classifier.Model import Classifier
 
 connection = sqlite3.connect("Images.sqlite")
 cursor = connection.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS Images(Name TEXT PRIMARY KEY, Label TEXT)")
-#imagesToClassify = GetListFilesRecursivelyAt("Pre-Trainer/**/*.webp")
+cursor.execute("CREATE TABLE IF NOT EXISTS Images(Name TEXT PRIMARY KEY, Label TEXT, Probability REAL)")
+imagesToClassify = GetListFilesRecursivelyAt("Pre-Trainer/**/*.webp")
 classifier = Classifier()
-classifier.ClassifyImage()
 
-#for imageClassify in imagesToClassify:
-#    label = classifier.ClassifyImage()
+for imageClassify in imagesToClassify:
+    prediction = classifier.ClassifyImage(imageClassify)
+    cursor.execute(
+        "INSERT INTO Images VALUES (?, ?, ?)",
+        (imageClassify, prediction['Label'], prediction['Probability']))

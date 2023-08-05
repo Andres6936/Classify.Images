@@ -123,7 +123,7 @@ class Classifier:
             labels = file.readlines()
             self.classes = [line.strip() for line in labels]
 
-    def ClassifyImage(self) -> AnyStr:
+    def ClassifyImage(self, pathImage: AnyStr) -> dict[AnyStr, float]:
         image_size = 224
         dynamic_size = False
 
@@ -141,53 +141,14 @@ class Classifier:
             dynamic_size = True
             print(f"Images will be capped to a max size of {max_dynamic_size}x{max_dynamic_size}")
 
-        image_name = "piano"  # @param ['tiger', 'bus', 'car', 'cat', 'dog', 'apple', 'banana', 'turtle', 'flamingo', 'piano', 'honeycomb', 'teapot']
-        images_for_test_map = {
-            "tiger": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Bengal_tiger_%28Panthera_tigris_tigris%29_female_3_crop.jpg",
-            # by Charles James Sharp, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons
-            "bus": "https://upload.wikimedia.org/wikipedia/commons/6/63/LT_471_%28LTZ_1471%29_Arriva_London_New_Routemaster_%2819522859218%29.jpg",
-            # by Martin49 from London, England, CC BY 2.0 <https://creativecommons.org/licenses/by/2.0>, via Wikimedia Commons
-            "car": "https://upload.wikimedia.org/wikipedia/commons/4/49/2013-2016_Toyota_Corolla_%28ZRE172R%29_SX_sedan_%282018-09-17%29_01.jpg",
-            # by EurovisionNim, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons
-            "cat": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_November_2010-1a.jpg",
-            # by Alvesgaspar, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons
-            "dog": "https://upload.wikimedia.org/wikipedia/commons/archive/a/a9/20090914031557%21Saluki_dog_breed.jpg",
-            # by Craig Pemberton, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons
-            "apple": "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg",
-            # by Abhijit Tembhekar from Mumbai, India, CC BY 2.0 <https://creativecommons.org/licenses/by/2.0>, via Wikimedia Commons
-            "banana": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Bananas_white_background.jpg",
-            # by fir0002  flagstaffotos [at] gmail.com       Canon 20D + Tamron 28-75mm f/2.8, GFDL 1.2 <http://www.gnu.org/licenses/old-licenses/fdl-1.2.html>, via Wikimedia Commons
-            "turtle": "https://upload.wikimedia.org/wikipedia/commons/8/80/Turtle_golfina_escobilla_oaxaca_mexico_claudio_giovenzana_2010.jpg",
-            # by Claudio Giovenzana, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons
-            "flamingo": "https://upload.wikimedia.org/wikipedia/commons/b/b8/James_Flamingos_MC.jpg",
-            # by Christian Mehlführer, User:Chmehl, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons
-            "piano": "https://upload.wikimedia.org/wikipedia/commons/d/da/Steinway_%26_Sons_upright_piano%2C_model_K-132%2C_manufactured_at_Steinway%27s_factory_in_Hamburg%2C_Germany.png",
-            # by "Photo: © Copyright Steinway & Sons", CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons
-            "honeycomb": "https://upload.wikimedia.org/wikipedia/commons/f/f7/Honey_comb.jpg",
-            # by Merdal, CC BY-SA 3.0 <http://creativecommons.org/licenses/by-sa/3.0/>, via Wikimedia Commons
-            "teapot": "https://upload.wikimedia.org/wikipedia/commons/4/44/Black_tea_pot_cropped.jpg",
-            # by Mendhak, CC BY-SA 2.0 <https://creativecommons.org/licenses/by-sa/2.0>, via Wikimedia Commons
-        }
-
-        img_url = images_for_test_map[image_name]
-        image, original_image = load_image(img_url, image_size, dynamic_size, max_dynamic_size)
-        show_image(image, 'Scaled image')
-
+        image, original_image = load_image(pathImage, image_size, dynamic_size, max_dynamic_size)
         classifier = hub.load(model_handle)
-
-        input_shape = image.shape
-        warmup_input = tf.random.uniform(input_shape, 0, 1.0)
-        warmup_logits = classifier(warmup_input).numpy()
 
         # Run model on image
         probabilities = tf.nn.softmax(classifier(image)).numpy()
 
         top_5 = tf.argsort(probabilities, axis=-1, direction="DESCENDING")[0][:5].numpy()
-        np_classes = np.array(self.classes)
 
         for i, item in enumerate(top_5):
             class_index = item
-            line = f'({i + 1}) {class_index:4} - {self.classes[class_index]}: {probabilities[0][top_5][i]}'
-            print(line)
-
-        show_image(image, '')
+            return {'Label': self.classes[class_index], 'Probability': probabilities[0][top_5][i]}
