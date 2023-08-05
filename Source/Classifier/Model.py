@@ -140,7 +140,7 @@ class Classifier:
 
         self.classifier = hub.load(model_handle)
 
-    def ClassifyImage(self, pathImage: AnyStr) -> dict[AnyStr, float]:
+    def ClassifyImage(self, pathImage: AnyStr) -> dict[AnyStr, np.float32]:
         image, original_image = load_image(pathImage, self.image_size, self.dynamic_size, self.max_dynamic_size)
         # Run model on image
         probabilities = tf.nn.softmax(self.classifier(image)).numpy()
