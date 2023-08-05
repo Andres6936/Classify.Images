@@ -7,11 +7,11 @@ name = "pypi"
 requests = "==2.31.*"
 numpy = "*"
 matplotlib = "*"
-tensorflow-cpu = "==2.10.*"
+tensorflow-cpu = "==2.13.*"
 pillow = "==10.*"
 tensorflow-hub = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"
