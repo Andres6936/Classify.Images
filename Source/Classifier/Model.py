@@ -123,30 +123,27 @@ class Classifier:
             labels = file.readlines()
             self.classes = [line.strip() for line in labels]
 
-    def ClassifyImage(self, pathImage: AnyStr) -> dict[AnyStr, float]:
-        image_size = 224
-        dynamic_size = False
+        self.image_size = 224
+        self.dynamic_size = False
 
         model_name = "efficientnetv2-l-21k"  # @param ['efficientnetv2-s', 'efficientnetv2-m', 'efficientnetv2-l', 'efficientnetv2-s-21k', 'efficientnetv2-m-21k', 'efficientnetv2-l-21k', 'efficientnetv2-xl-21k', 'efficientnetv2-b0-21k', 'efficientnetv2-b1-21k', 'efficientnetv2-b2-21k', 'efficientnetv2-b3-21k', 'efficientnetv2-s-21k-ft1k', 'efficientnetv2-m-21k-ft1k', 'efficientnetv2-l-21k-ft1k', 'efficientnetv2-xl-21k-ft1k', 'efficientnetv2-b0-21k-ft1k', 'efficientnetv2-b1-21k-ft1k', 'efficientnetv2-b2-21k-ft1k', 'efficientnetv2-b3-21k-ft1k', 'efficientnetv2-b0', 'efficientnetv2-b1', 'efficientnetv2-b2', 'efficientnetv2-b3', 'efficientnet_b0', 'efficientnet_b1', 'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5', 'efficientnet_b6', 'efficientnet_b7', 'bit_s-r50x1', 'inception_v3', 'inception_resnet_v2', 'resnet_v1_50', 'resnet_v1_101', 'resnet_v1_152', 'resnet_v2_50', 'resnet_v2_101', 'resnet_v2_152', 'nasnet_large', 'nasnet_mobile', 'pnasnet_large', 'mobilenet_v2_100_224', 'mobilenet_v2_130_224', 'mobilenet_v2_140_224', 'mobilenet_v3_small_100_224', 'mobilenet_v3_small_075_224', 'mobilenet_v3_large_100_224', 'mobilenet_v3_large_075_224']
         model_handle = model_handle_map[model_name]
 
-        print(f"Selected model: {model_name} : {model_handle}")
-
-        max_dynamic_size = 512
+        self.max_dynamic_size = 512
         if model_name in model_image_size_map:
-            image_size = model_image_size_map[model_name]
-            dynamic_size = False
-            print(f"Images will be converted to {image_size}x{image_size}")
+            self.image_size = model_image_size_map[model_name]
+            self.dynamic_size = False
+            print(f"Images will be converted to {self.image_size}x{self.image_size}")
         else:
-            dynamic_size = True
-            print(f"Images will be capped to a max size of {max_dynamic_size}x{max_dynamic_size}")
+            self.dynamic_size = True
+            print(f"Images will be capped to a max size of {self.max_dynamic_size}x{self.max_dynamic_size}")
 
-        image, original_image = load_image(pathImage, image_size, dynamic_size, max_dynamic_size)
-        classifier = hub.load(model_handle)
+        self.classifier = hub.load(model_handle)
 
+    def ClassifyImage(self, pathImage: AnyStr) -> dict[AnyStr, float]:
+        image, original_image = load_image(pathImage, self.image_size, self.dynamic_size, self.max_dynamic_size)
         # Run model on image
-        probabilities = tf.nn.softmax(classifier(image)).numpy()
-
+        probabilities = tf.nn.softmax(self.classifier(image)).numpy()
         top_5 = tf.argsort(probabilities, axis=-1, direction="DESCENDING")[0][:5].numpy()
 
         for i, item in enumerate(top_5):
