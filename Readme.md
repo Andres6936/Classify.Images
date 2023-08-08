@@ -18,3 +18,14 @@ del triángulo.
 ## Interfaz
 
 ![GUI](Docs/Specs/GUI.png)
+
+### Project with Tensorflow
+
+This project uses Tensorflow to classify images in format webp that were scraped 
+from of ECommerce. The scraper donwload the images of site, but these these images 
+have meaningless numbers as file name, so the idea is to use Tensorflow to classify
+and sort these images into directories for later use.
+
+The process currently has three stages, the first is the scrapper, the seconds is the
+classification of these images and the third stage is move these images to the
+corresponding directory to give in the order imposed in the second stage.
