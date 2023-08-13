@@ -29,3 +29,26 @@ and sort these images into directories for later use.
 The process currently has three stages, the first is the scrapper, the seconds is the
 classification of these images and the third stage is move these images to the
 corresponding directory to give in the order imposed in the second stage.
+
+### How to Start
+
+1. Clone the repository for the project to your local machine.
+2. Navigate to the directory for the project in your terminal. 
+3. Install the packages that are required for the project by running the following command:
+
+`pipenv install`
+
+This will install the packages that are listed in the Pipfile and Pipfile.lock files.
+
+4. To activate the virtual environment for the project, run the following command:
+
+`pipenv shell`
+
+This will change your shell environment to use the packages that are installed in the project's virtual environment.
+
+5. Once you are in the virtual environment, you can start working on the project. You can install additional packages, run Python scripts, and use any other tools that you need for the project.
+6. To exit the virtual environment, run the following command:
+
+`exit`
+
+This will return you to your normal shell environment.
