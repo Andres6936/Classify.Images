@@ -12,6 +12,7 @@ pillow = "==10.*"
 tensorflow-hub = "*"
 fastapi = "*"
 uvicorn = {version = "*", extras = ["standard"]}
+peewee = "*"
 
 [dev-packages]
 
