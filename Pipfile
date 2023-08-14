@@ -10,6 +10,8 @@ matplotlib = "*"
 tensorflow-cpu = "==2.13.*"
 pillow = "==10.*"
 tensorflow-hub = "*"
+fastapi = "*"
+uvicorn = {version = "*", extras = ["standard"]}
 
 [dev-packages]
 
