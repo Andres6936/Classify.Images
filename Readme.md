@@ -30,6 +30,10 @@ The process currently has three stages, the first is the scrapper, the seconds i
 classification of these images and the third stage is move these images to the
 corresponding directory to give in the order imposed in the second stage.
 
+### Deleting webp repeat with hash function
+
+### Using SQLite for save information in intermediate process
+
 ### How to Start
 
 1. Clone the repository for the project to your local machine.

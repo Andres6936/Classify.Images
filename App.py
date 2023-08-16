@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
 from Services.Models.Banned import Banned
+from Services.Models.Products import Products
+from Services.Models.Reference import Reference
 
 app = FastAPI()
 
@@ -13,14 +15,16 @@ def GetRoot():
 @app.get('/banned/count')
 def GetCountBanned():
     count = Banned.select().count()
-    return {'count': count}
+    return {'Count': count}
 
 
 @app.get('/products/count')
 def GetCountProducts():
-    pass
+    count = Products.select().count()
+    return {'Count': count}
 
 
 @app.get('/reference/count')
 def GetCountReference():
-    pass
+    count = Reference.select().count()
+    return {'Count': count}

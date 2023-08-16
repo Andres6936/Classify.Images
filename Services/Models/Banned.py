@@ -1,12 +1,9 @@
-from peewee import Model, SqliteDatabase, CharField, DecimalField
+from peewee import CharField, DecimalField
 
-db = SqliteDatabase('./Data/SQLite.sqlite')
+from Services.Models.BaseModel import BaseModel
 
 
-class Banned(Model):
+class Banned(BaseModel):
     SKU = DecimalField()
     Name = CharField()
     Price = DecimalField()
-
-    class Meta:
-        database = db
