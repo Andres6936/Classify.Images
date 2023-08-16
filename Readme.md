@@ -56,3 +56,9 @@ This will change your shell environment to use the packages that are installed i
 `exit`
 
 This will return you to your normal shell environment.
+
+### How to Start the service
+
+The command for start the service:
+
+`uvicorn App:app --reload`
