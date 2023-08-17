@@ -22,7 +22,7 @@ del triángulo.
 ### Project with Tensorflow
 
 This project uses Tensorflow to classify images in format webp that were scraped 
-from of ECommerce. The scraper donwload the images of site, but these these images 
+from of ECommerce. The scraper download the images of site, but these images 
 have meaningless numbers as file name, so the idea is to use Tensorflow to classify
 and sort these images into directories for later use.
 
@@ -32,7 +32,16 @@ corresponding directory to give in the order imposed in the second stage.
 
 ### Deleting webp repeat with hash function
 
+After the process of downloading of the images by the scrapper, it is convenient to 
+eliminate the images that are repeated, leaving only one imagen and eliminating the
+remaining repeated images, for this process the hashes of the images download are
+calculated and nay hash with more than one coincidence is eliminated until leaving
+only one image, avoiding repetition.
+
+
 ### Using SQLite for save information in intermediate process
+
+
 
 ### How to Start
 
