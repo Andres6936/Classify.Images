@@ -1,8 +1,18 @@
 import logging
 import sqlite3
 
+from sqlite3 import Cursor
+from typing import AnyStr
+
 from Source.Classifier.LoaderFiles import GetListFilesRecursivelyAt
 from Source.Classifier.Model import Classifier
+
+
+def ImageAlreadyClassified(imagePath: AnyStr, cursor: Cursor):
+    response = cursor.execute("SELECT COUNT(1) FROM Images WHERE Name = ?", imagePath)
+    count = response.fetchone()
+    return True if count > 0 else False
+
 
 
 if __name__ == '__main__':
@@ -15,14 +25,19 @@ if __name__ == '__main__':
     connection = sqlite3.connect("Images.sqlite")
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE IF NOT EXISTS Images(Name TEXT PRIMARY KEY, Label TEXT, Probability REAL)")
-    images = GetListFilesRecursivelyAt("Pre-Trainer/**/*.webp")
+    images: list[AnyStr] = GetListFilesRecursivelyAt("Pre-Trainer/**/*.webp")
     classifier = Classifier()
 
     for imageClassify in images:
         logging.info(f"Start classify of image: {imageClassify}")
+        if ImageAlreadyClassified(imageClassify, cursor):
+            logging.info(f"Image already classified, skipping image")
+            continue
+
         prediction = classifier.ClassifyImage(imageClassify)
         cursor.execute(
             "INSERT INTO Images VALUES (?, ?, ?)",
             (imageClassify, prediction['Label'], prediction['Probability'].item()))
         connection.commit()
-        logging.info(f"Inserted register in database with values ({prediction['Label']}, {prediction['Probability'].item()})")
+        logging.info(
+            f"Inserted register in database with values ({prediction['Label']}, {prediction['Probability'].item()})")
